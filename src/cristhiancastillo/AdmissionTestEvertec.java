@@ -1,8 +1,4 @@
-/**
- * 
- */
 package cristhiancastillo;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +17,6 @@ public class AdmissionTestEvertec {
      */
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
-
         String functionAndValues = sc.nextLine();
         int index = functionAndValues.indexOf(" ");
         if (index == -1) {
@@ -29,69 +24,36 @@ public class AdmissionTestEvertec {
             sc.close();
             throw new Exception();
         }
-
         String function = functionAndValues.substring(0, index);
         String arrayValues = functionAndValues.substring(index + 1, functionAndValues.length());
-
-        if (function.equalsIgnoreCase("OA")) {
-            System.out.println("ORDEN ASCENDENTE");
-            Integer[] arrayFinal = getArray(arrayValues);
-            Arrays.sort(arrayFinal);
-            System.out.println(Arrays.toString(arrayFinal));
-            sc.close();
+        final String ASCENDING_SORT_FUNCTION = "OA";
+        final String DESCENDING_SORT_FUNCTION = "OD";
+        final String BIGGER_NUMBER_FUNCTION = "NM";
+        final String MINOR_NUMBER_FUNCTION = "NMN";
+        final String SUM_VALUES_FUNCTION = "VS";
+        final String SUM_VALUES_BYTES_FUNCTION = "VSB";
+        if (function.equalsIgnoreCase(ASCENDING_SORT_FUNCTION)) {
+            System.out.println(ascendingOrder(arrayValues));
         }
-        else if (function.equalsIgnoreCase("OD")) {
-            System.out.println("ORDEN DESCENTE");
-            Integer[] arrayFinal = getArray(arrayValues);
-            Arrays.sort(arrayFinal, Collections.reverseOrder());
-            System.out.println(Arrays.toString(arrayFinal));
+        else if (function.equalsIgnoreCase(DESCENDING_SORT_FUNCTION)) {
+            System.out.println(descendingOrder(arrayValues));
         }
-        else if (function.equalsIgnoreCase("NM")) {
-            System.out.println("NUMERO MAYOR");
-            Integer[] arrayFinal = getArray(arrayValues);
-            int biggerNumber = arrayFinal[0];
-            int indexArray = 0;
-            for (int i = 0; i < arrayFinal.length; i++) {
-                if (arrayFinal[i]>biggerNumber) {
-                    biggerNumber = arrayFinal[i];
-                    indexArray = i;
-                }
-            }
-            System.out.print("El número mayor es " + biggerNumber + " en el índice ");
-            System.out.print(findRepeatedNumber(biggerNumber, arrayFinal, indexArray));
-            sc.close();
+        else if (function.equalsIgnoreCase(BIGGER_NUMBER_FUNCTION)) {
+            biggerNumber(arrayValues);
         }
-        else if (function.equalsIgnoreCase("NMN")) {
-            System.out.println("NUMERO MENOR");
-            Integer[] arrayFinal = getArray(arrayValues);
-            int minorNumber = arrayFinal[0];
-            int indexArray = 0;
-            for (int i = 0; i < arrayFinal.length; i++) {
-                if (arrayFinal[i]<minorNumber) {
-                    minorNumber = arrayFinal[i];
-                    indexArray = i;
-                }
-            }
-            System.out.print("El número menor es " + minorNumber + " en el índice ");
-            System.out.print(findRepeatedNumber(minorNumber, arrayFinal, indexArray));
-            sc.close();
+        else if (function.equalsIgnoreCase(MINOR_NUMBER_FUNCTION)) {
+            minorNumber(arrayValues);
         }
-        else if (function.equalsIgnoreCase("VS")) {
-            System.out.println("VALOR TOTAL");
-            Integer[] arrayFinal = getArray(arrayValues);
-            System.out.println("El valor total del arreglo es " + printTotalSum(0, arrayFinal.length-1, arrayFinal));
-            sc.close();
+        else if (function.equalsIgnoreCase(SUM_VALUES_FUNCTION)) {
+            totalSum(arrayValues);
         }
-        else if (function.equalsIgnoreCase("VSB")) {
-            System.out.println("VALOR TOTAL EN BYTES");
-            Integer[] arrayFinal = getArray(arrayValues);
-            //arrayInBytes(arrayValues);
-            int totalSum = printTotalSum(0, arrayFinal.length-1, arrayFinal);
-            System.out.println(arrayInBytes(totalSum));
-            sc.close();
+        else if (function.equalsIgnoreCase(SUM_VALUES_BYTES_FUNCTION)) {
+            totalSumBytes(arrayValues);
         }
-        else
+        else {
             System.out.println("Ingrese un comando correcto.");
+        }
+        sc.close();
     }
 
     /**
@@ -109,25 +71,67 @@ public class AdmissionTestEvertec {
         return arrayFinal;
     }
     
+    /**
+     * Método que organiza el arreglo en orden ascendente.
+     * @param arrayValues Cadena con los valores del arreglo.
+     * @return Arreglo ordenado de forma ascendente en cadena de caractéres.
+     */
+    public static String ascendingOrder (String arrayValues) {
+        System.out.println("ORDEN ASCENDENTE");
+        Integer[] arrayFinal = getArray(arrayValues);
+        Arrays.sort(arrayFinal);
+        return Arrays.toString(arrayFinal);
+    }
     
     /**
-     * Método que calcula la suma del arreglo por medio de recursividad.
-     * 
-     * @param arrayFinal Arreglo de enteros
-     * @param startIndex Inicio del recorrido del arreglo
-     * @param endIndex Fin del recorrido del arreglo.
-     * @return Valor total del arreglo.
+     * @param arrayValues Cadena con los valores de arreglo.
+     * @return Arreglo ordenado de forma descendente en cadena de caractéres.
      */
-    public static int printTotalSum(int startIndex, int endIndex, Integer[] arrayFinal) {
-        if (startIndex == endIndex) {
-            return arrayFinal[startIndex];
-        } else {
-            int middleIndex=(startIndex+endIndex)/2;
-            int x = printTotalSum(startIndex, middleIndex, arrayFinal);
-            int y = printTotalSum(middleIndex+1, endIndex, arrayFinal);
-            return x+y;
-        }
+    public static String descendingOrder (String arrayValues) {
+        System.out.println("ORDEN DESCENTE");
+        Integer[] arrayFinal = getArray(arrayValues);
+        Arrays.sort(arrayFinal, Collections.reverseOrder());
+        return Arrays.toString(arrayFinal);
     }
+    
+    /**
+     * Método que encuentra el número mayor dentro del arreglo.
+     * @param arrayValues Cadena con los valores del arreglo.
+     */
+    public static void biggerNumber(String arrayValues) {
+        System.out.println("NUMERO MAYOR");
+        Integer[] arrayFinal = getArray(arrayValues);
+        int biggerNumber = arrayFinal[0];
+        int indexArray = 0;
+        for (int i = 0; i < arrayFinal.length; i++) {
+            if (arrayFinal[i]>biggerNumber) {
+                biggerNumber = arrayFinal[i];
+                indexArray = i;
+            }
+        }
+        System.out.print("El número mayor es " + biggerNumber + " en el índice ");
+        System.out.print(findRepeatedNumber(biggerNumber, arrayFinal, indexArray));
+    }
+    
+    /**
+     * Método que encuentra el número menor dentro del arreglo.
+     * @param arrayValues Cadena con los valores del arreglo.
+     */
+    public static void minorNumber(String arrayValues) {
+        System.out.println("NUMERO MENOR");
+        Integer[] arrayFinal = getArray(arrayValues);
+        int minorNumber = arrayFinal[0];
+        int indexArray = 0;
+        for (int i = 0; i < arrayFinal.length; i++) {
+            if (arrayFinal[i]<minorNumber) {
+                minorNumber = arrayFinal[i];
+                indexArray = i;
+            }
+        }
+        System.out.print("El número menor es " + minorNumber + " en el índice ");
+        System.out.print(findRepeatedNumber(minorNumber, arrayFinal, indexArray));
+    }
+    
     
     /**
      * Método para mostrar el último número repetido encontrado en el arreglo.
@@ -146,6 +150,47 @@ public class AdmissionTestEvertec {
         return indexArray;
     }
     
+    
+    /**
+     * Método que realiza el llamado al método recursivo.
+     * @param arrayValues Cadena con los valores del arreglo.
+     */
+    public static void totalSum(String arrayValues) {
+        System.out.println("VALOR TOTAL");
+        Integer[] arrayFinal = getArray(arrayValues);
+        System.out.println("El valor total del arreglo es " + printTotalSum(0, arrayFinal.length-1, arrayFinal));
+    }
+    
+    /**
+     * Método que calcula la suma del arreglo por medio de recursividad.
+     * 
+     * @param arrayFinal Arreglo de enteros
+     * @param startIndex Inicio del recorrido del arreglo
+     * @param endIndex Fin del recorrido del arreglo.
+     * @return Valor total del arreglo.
+     */
+    public static int printTotalSum(int startIndex, int endIndex, Integer[] arrayFinal) {
+        if (startIndex == endIndex) {
+            return arrayFinal[startIndex];
+        } else {
+            int middleIndex=(startIndex+endIndex)/2;
+            int temporaryVariableX = printTotalSum(startIndex, middleIndex, arrayFinal);
+            int temporaryVariableY = printTotalSum(middleIndex+1, endIndex, arrayFinal);
+            return temporaryVariableX+temporaryVariableY;
+        }
+    }
+    
+    /**
+     * Método que realiza la conversión de la suma total en bytes.
+     * @param arrayValues Cadena con los valores del arreglo.
+     */
+    public static void totalSumBytes(String arrayValues) {
+        System.out.println("VALOR TOTAL EN BYTES");
+        Integer[] arrayFinal = getArray(arrayValues);
+        int totalSum = printTotalSum(0, arrayFinal.length-1, arrayFinal);
+        System.out.println(arrayInBytes(totalSum));
+    }
+    
     /**
      * Método para convertir la suma total del arreglo en bytes.
      * 
@@ -154,16 +199,13 @@ public class AdmissionTestEvertec {
      * 
      */
     public static byte[] arrayInBytes(int totalSum) {
-        
         String totalSumString = String.valueOf(totalSum);
         ArrayList<String> arrayListByte = new ArrayList<>();
         arrayListByte.add(totalSumString);
-        byte[] arrayByte = new byte[arrayListByte.size()];
-        
+        byte[] arrayByte = new byte[arrayListByte.size()]; 
         for (int i = 0; i < arrayListByte.size(); i++) {
             arrayByte = arrayListByte.get(i).getBytes();
-        }
-        
+        } 
         return arrayByte;
 
     }
